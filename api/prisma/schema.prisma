@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Influencer {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  firstName String
+  lastName  String
+  avatar    String?
+  managerId String    @db.ObjectId
+  manager   Manager   @relation(fields: [managerId], references: [id])
+  accounts  Account[]
+  addedAt   DateTime  @default(now())
+}
+
+model Manager {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  firstName   String
+  lastName    String
+  influencers Influencer[]
+}
+
+model Account {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  username     String
+  type         Type
+  influencerId String     @db.ObjectId
+  influencer   Influencer @relation(fields: [influencerId], references: [id])
+}
+
+enum Type {
+  tiktok
+  instagram
+}
