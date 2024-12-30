@@ -30,9 +30,24 @@ const ListPage: React.FC = () => {
         return response.data;
     };
 
-    const fetchManagers = async (): Promise<Manager[]> => {
-        const response = await api.get('/api/managers');
-        return response.data;
+    const getInfluencers = async () => {
+        try {
+            const data = await fetchInfluencers();
+            setInfluencers(data);
+
+            const uniqueManagers: Manager[] = [];
+            const seenIds = new Set();
+            data.map((influencer) => influencer.manager).forEach(manager => {
+                if (!seenIds.has(manager.id)) {
+                    seenIds.add(manager.id);
+                    uniqueManagers.push(manager);
+                }
+            });
+
+            setManagers(uniqueManagers)
+        } catch (error) {
+            console.error('Failed to fetch influencers:', error);
+        }
     };
 
     const fetchAccounts = async () => {
@@ -194,24 +209,8 @@ const ListPage: React.FC = () => {
 
 
     useEffect(() => {
-        const getInfluencers = async () => {
-            try {
-                const data = await fetchInfluencers();
-                setInfluencers(data);
-            } catch (error) {
-                console.error('Failed to fetch influencers:', error);
-            }
-        };
-        const getManagers = async () => {
-            try {
-                const data = await fetchManagers();
-                setManagers(data);
-            } catch (error) {
-                console.error('Failed to fetch managers:', error);
-            }
-        };
+        console.log("Hello")
         getInfluencers();
-        getManagers();
     }, []);
 
     return (
