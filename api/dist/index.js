@@ -12,7 +12,7 @@ const account_routes_1 = __importDefault(require("./routes/account.routes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const CLIENT_URL = process.env.CLIENT_URL || '*';
-app.use((0, cors_1.default)({ origin: CLIENT_URL, credentials: true }));
+app.use((0, cors_1.default)({ origin: '*', credentials: true }));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 // Routes

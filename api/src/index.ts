@@ -9,8 +9,8 @@ dotenv.config();
 
 const app = express();
 
-const CLIENT_URL = process.env.CLIENT_URL || '*';
-app.use(cors({origin: CLIENT_URL, credentials: true}))
+// const CLIENT_URL = process.env.CLIENT_URL || '*';
+app.use(cors({origin: '*', credentials: true}))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
