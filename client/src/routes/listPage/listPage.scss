@@ -1,0 +1,405 @@
+@import '../../styles/responsive.scss';
+@import '../../styles/variables.scss';
+
+#list-page {
+    #list-contents-container {
+        display: flex;
+        flex-direction: column;
+        padding-inline: spacing;
+
+        &.hidden {
+            filter: blur(6px);
+        }
+
+        #list-heading-container {
+            display: flex;
+            gap: $spacing-md;
+            margin-top: $spacing-xlg;
+
+            h1 {
+                display: flex;
+                align-items: center;
+
+            }
+        }
+
+        #list-search-filter-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: $spacing-lg;
+
+            #list-search-wrapper {
+                display: flex;
+                width: 50%;
+
+                #list-search {
+                    width: 100%;
+                    background: url(../../../public/searchImgLg.svg) no-repeat scroll calc(100% - 12px) 50%;
+                    font-family: inherit;
+                    font-size: inherit;
+                    line-height: inherit;
+                    color: $text-color;
+                    border: 1px solid $secondary-color;
+                    border-radius: 4px;
+                    padding: $spacing-sm 12px;
+
+                    @include md {
+                        background: url(../../../public/searchImgSm.svg) no-repeat scroll calc(100% - 8px) 50%;
+                        padding: 6px $spacing-sm;
+                    }
+
+                }
+            }
+
+            #list-filter-wrapper {
+                #list-filter {
+                    background: url(../../../public/arrowDownImgLg.svg) no-repeat scroll 12px 50%;
+                    font-family: inherit;
+                    font-size: inherit;
+                    line-height: inherit;
+                    color: $secondary-color;
+                    border: 1px solid $secondary-color;
+                    border-radius: 4px;
+                    padding: $spacing-sm 12px $spacing-sm 40.8px;
+                    -moz-appearance: none;
+                    -webkit-appearance: none;
+
+                    &::-ms-expand {
+                        display: none;
+                    }
+
+                    @include md {
+                        background: url(../../../public/arrowDownImgSm.svg) no-repeat scroll 8px 50%;
+                        padding: 6px $spacing-sm 6px 30px;
+                    }
+                }
+            }
+        }
+
+        #list-influencers {
+            display: flex;
+            flex-direction: column;
+            margin-top: $spacing-lg;
+
+            @include md {
+                margin-top: $spacing-md;
+            }
+
+            #list-influencers-container {
+                display: flex;
+                flex-direction: column;
+                padding: $spacing-sm;
+                border: 1px solid $tertiary-color;
+                border-radius: 4px;
+                max-height: 40rem;
+                overflow-y: scroll;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+
+                &::-webkit-scrollbar { 
+                    display: none;
+                }
+
+                @include md {
+                    max-height: 30rem;
+                }
+                
+
+                #list-influencers-header {
+                    display: flex;
+                    justify-content: space-between;
+                    background-color: $secondary-color;
+                    padding: $spacing-sm;
+                    font-size: inherit;
+
+                    @include sm {
+                        padding: $spacing-xsm;
+                    }
+
+                    #header-influencer-details {
+                        display: flex;
+                        gap: $spacing-lg;
+
+                        #header-influencer-name-wrapper {
+                            display: flex;
+                            align-items: center;
+                            width: 64px;
+                            @include sm {
+                                width: $spacing-xxlg;
+                            }
+                        }
+
+                        #header-influencer-added-wrapper {
+                            display: flex;
+                            align-items: center;
+                            width: $spacing-xxlg;
+
+                            @include sm {
+                                width: inherit;
+                            }
+                        }
+
+                        #header-tiktok-accounts-wrapper {
+                            display: flex;
+                            align-items: center;
+                            width: $spacing-xxlg;
+
+                            @include sm {
+                                display: none;
+                            }
+
+                        }
+
+                        #header-instagram-accounts-wrapper {
+                            display: flex;
+                            align-items: center;
+                            width: $spacing-xxlg;
+
+                            @include sm {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    #header-manager-details {
+                        display: flex;
+                        align-items: center;
+
+                        #header-manager-wrapper {
+                            display: flex;
+                            align-items: center;
+                            width: calc(1.5 * $spacing-xxlg);
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+
+                            @include sm {
+                                width: $spacing-xxlg;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    #edit-influencer {
+        display: none;
+        position: absolute;
+        top: 4rem;
+        left: 0;
+        z-index: 1000;
+        width: 100vw;
+        height: calc(100vh - 4rem);
+        background: rgba(37, 37, 35, 0.6);
+        padding-inline: $spacing-xxlg;
+
+        @include lg {
+            padding-inline: $spacing-xlg;
+        }
+
+        @include md {
+            padding-inline: $spacing-lg;
+        }
+
+        @include sm {
+            padding-inline: $spacing-md;
+        }
+
+        &.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        #edit-influencer-content {
+            width: 40rem;
+
+            @include md {
+                width: 30rem;
+            }
+
+            @include sm {
+                width: 100%;
+            }
+
+            #close-edit-influencer {
+                display: flex;
+                align-items: center;
+                width: 2rem;
+                height: $spacing-xlg;
+                transition: all 0.3s;
+
+                &:hover {
+                    transform: scale(1.3);
+                }
+
+                img {
+                    width: 100%;
+                }
+            }
+
+            #edit-influencer-details {
+                margin-top: $spacing-sm;
+                display: flex;
+                justify-content: space-between;
+
+                #influencer-details-container {
+                    h4 {
+                        color: $secondary-color;
+                    }
+                }
+            }
+
+            .username-container {
+                display: flex;
+                flex-direction: column;
+                gap: $spacing-xsm;
+                margin-top: $spacing-lg;
+
+                label {
+                    font-size: $font-size-md;
+                    display: none;
+
+                    &.active {
+                        display: flex;
+                    }
+                }
+
+                #new-username-label {
+                    margin-top: $font-size-md;
+                }
+
+                .username-details-container {
+                    display: none;
+                    justify-content: space-between;
+
+                    &.active {
+                        display: flex;
+                    }
+
+                    input {
+                        padding-inline: $spacing-sm;
+                        width: 50%;
+                    }
+
+                    .radio-btn-container {
+                        display: flex;
+                        gap: $spacing-xsm;
+
+                        img {
+                            width: 1.5rem;
+
+                            @include sm {
+                                width: 1rem;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .form-el-container {
+                display: flex;
+                flex-direction: column;
+                gap: $spacing-xsm;
+                margin-bottom: $spacing-md;
+            }
+
+            .form-el {
+                font-size: inherit;
+                font-family: inherit;
+                background-color: inherit;
+                color: $secondary-color;
+                border: 1px solid $secondary-color;
+                border-radius: $spacing-xsm;
+                padding: $spacing-sm $spacing-xsm;
+                ;
+            }
+
+            .accounts-list-container {
+                display: flex;
+                gap: $spacing-xsm;
+                flex-direction: column;
+                overflow-y: scroll;
+                border-radius: $spacing-xsm;
+                max-height: 20rem;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+
+                &::-webkit-scrollbar { 
+                    display: none;
+                }
+
+                @include md {
+                    max-height: 15rem;
+                }
+
+                .new-account-container {
+                    display: flex;
+                    flex-direction: row;
+                    gap: $spacing-xsm;
+
+                    .new-account {
+                        display: flex;
+                        flex-direction: row;
+                        flex: 1;
+                        justify-content: space-between;
+                        align-items: center;
+                        background-color: $secondary-color;
+                        padding: $spacing-sm;
+                        border-radius: $spacing-xsm;
+
+                        .new-account-imgs {
+                            display: flex;
+                            align-items: center;
+                            gap: $spacing-md;
+
+                            .social-logo-wrapper {
+                                display: flex;
+                                align-items: center;
+                            }
+
+                            .delete-img-wrapper {
+                                display: flex;
+                                align-items: center;
+
+                                img {
+                                    width: 1rem;
+                                }
+                            }
+                        }
+                    }
+
+                    .delete-btn {
+                        display: none;
+
+                        &.active {
+                            display: flex;
+                        }
+                    }
+                }
+            }
+
+            .managers-list-container {
+                margin-top: $spacing-md;
+                display: none;
+
+                &.active {
+                    display: flex;
+                }
+
+            }
+
+            #delete-influencer {
+                display: none;
+                align-items: center;
+                justify-content: space-between;
+
+                &.active {
+                    display: flex;
+                }
+            }
+        }
+    }
+}

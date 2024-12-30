@@ -1,6 +1,28 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
 
+export const getAccounts = async (req: Request, res: Response) => {
+    try {
+        const account = await prisma.account.findMany({
+        });
+        res.status(200).json(account);
+    } catch (error) {
+        console.error(error);
+        res.status(404).json({message: "Failed to get accounts"});
+    }
+}
+export const getInfluencerAccounts = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    try {
+        const accounts = await prisma.account.findMany({
+            where: { influencerId: id },
+        });
+        res.status(200).json(accounts);
+    } catch (error) {
+        console.error('Error fetching accounts:', error);
+        res.status(500).json({ message: 'Failed to fetch accounts' });
+    }
+}
 export const addAccount = async (req: Request, res: Response) => {
     const { username, type, influencerId } = req.body;
     try {

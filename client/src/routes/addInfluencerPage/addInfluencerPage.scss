@@ -1,0 +1,134 @@
+@import '../../styles/responsive.scss';
+@import '../../styles/variables.scss';
+
+#add-influencer-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    #add-influencer-back {
+        width: 100%;
+        height: $spacing-xxlg;
+        display: flex;
+        align-items: center;
+
+        @include sm {
+            height: $spacing-xlg;
+        }
+        img {
+            width: 2rem;
+            height: 2rem;
+            transition: all 0.3s;
+            &:hover {
+                transform: scale(1.2);
+            }
+
+            @include sm {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
+    }
+    #add-influencer-form-container {
+        width: 40rem;
+
+        @include md {
+            width: 25rem;
+        }
+
+        @include sm {
+            width: 100%;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+
+            #first-name-container {
+                margin-top: $spacing-lg;
+                input {
+                    padding-inline: $spacing-sm;
+                }
+            }
+            #last-name-container {
+                input {
+                    padding-inline: $spacing-sm;
+                }
+            }
+            #username-container {
+                display: flex;
+                flex-direction: column;
+                gap: $spacing-xsm;
+                margin-bottom: $spacing-md;
+                #username-details-container {
+                    display: flex;
+                    justify-content: space-between;
+                    input {
+                        padding-inline: $spacing-sm;
+                        width: 50%;
+                    }
+                    .radio-btn-container {
+                        display: flex;
+                        gap: $spacing-xsm;
+                        img {
+                            width: 1.5rem;
+                            @include sm {
+                                width: 1rem;
+                            }
+                        }
+                    }
+                }
+            }
+
+            #accounts-list-container {
+                display: flex;
+                gap: $spacing-xsm;
+                flex-direction: column;
+                border-radius: $spacing-xsm;
+
+                &.active {
+                    margin-bottom: $spacing-md;
+                }
+
+                .new-account {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    background-color: $secondary-color;
+                    padding: $spacing-sm;
+                    border-radius: $spacing-xsm;
+                }
+                .new-account-imgs {
+                    display: flex;
+                    align-items: center;
+                    gap: $spacing-md;
+                    .social-logo-wrapper {
+                        display: flex;
+                        align-items: center;
+                    }
+                    .delete-img-wrapper {
+                        display: flex;
+                        align-items: center;
+                        img {
+                            width: 1rem;
+                        }
+                    }
+                }
+            }
+
+            .form-el-container {
+                display: flex;
+                flex-direction: column;
+                gap: $spacing-xsm;
+                margin-bottom: $spacing-md;
+            }
+            .form-el {
+                font-size: inherit;
+                font-family: inherit;
+                background-color: inherit;
+                color: $secondary-color;
+                border: 1px solid $secondary-color;
+                border-radius: $spacing-xsm;
+                padding: $spacing-sm $spacing-xsm;;
+            }
+        }
+    }
+}

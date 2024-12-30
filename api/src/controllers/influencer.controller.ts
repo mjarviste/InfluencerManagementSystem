@@ -58,15 +58,17 @@ export const getInfluencer = async (req: Request, res: Response) => {
     }
 }
 export const getInfluencersByManager = async (req: Request, res: Response) => {
-    const managerId = req.params.managerId;
+    const managerId = req.query.managerId;
     try {
-        const influencers = prisma.influencer.findMany({
-            where: {managerId},
+
+        const influencers = await prisma.influencer.findMany({
+            where: {managerId: managerId as string},
             include: {
                 manager: true,
                 accounts: true,
             }
         });
+        
         res.status(200).json(influencers);
     } catch(error) {
         res.status(500).json({message: "Failed to get influencers"})
@@ -111,27 +113,28 @@ export const deleteInfluencer = async (req: Request, res: Response) => {
         res.status(500).json({message: "Failed to delete influencer"})
     }
 }
-// export const searchInfluencers = async (req: Request, res: Response) => {
-//     const name = req.query.name;
-//     if(!name || (name as string).length < 2) {
-//         return res.status(400).json({ message: 'Search term must be at least 2 characters long' });
-//     }
-//     try {
-//         const influencers = await prisma.influencer.findMany({
-//             where: {
-//                 OR: [
-//                     {firstName: { contains: name as string, mode:'insensitive'}},
-//                     {lastName: { contains: name as string, mode:'insensitive'}},
-//                 ]
-//             },
-//             include: {
-//                 manager: true,
-//                 accounts: true,
-//             }
-//         });
-//         res.status(200).json(influencers)
-//     } catch(error) {
-//         console.error(error)
-//         res.status(500).json({message: "Failed to get influencers"});
-//     }
-// }
+export const searchInfluencers = async (req: Request, res: Response) => {
+    const name = req.query.name;
+    if(!name || (name as string).length < 2) {
+        res.status(400).json({ message: 'Search term must be at least 2 characters long' });
+        return;
+    }
+    try {
+        const influencers = await prisma.influencer.findMany({
+            where: {
+                OR: [
+                    {firstName: { contains: name as string, mode:'insensitive'}},
+                    {lastName: { contains: name as string, mode:'insensitive'}},
+                ]
+            },
+            include: {
+                manager: true,
+                accounts: true,
+            }
+        });
+        res.status(200).json(influencers)
+    } catch(error) {
+        console.error(error)
+        res.status(500).json({message: "Failed to get influencers"});
+    }
+}

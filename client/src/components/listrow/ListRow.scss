@@ -1,0 +1,81 @@
+@import '../../styles/responsive.scss';
+@import '../../styles/variables.scss';
+
+.list-row {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: $spacing-xsm;
+    border-bottom: 1px solid $secondary-color;
+    padding: $spacing-md $spacing-sm;
+    &:hover {
+        background: $tertiary-color;
+    }
+    @include sm {
+        padding: calc(1.5 * $spacing-sm) $spacing-xsm;
+    }
+    .influencer-details {
+        display: flex;
+        align-items: center;
+        gap: $spacing-lg;
+        .influencer-container {
+            display: flex;
+            align-items: center;
+            width: calc(1.5 * $spacing-xxlg);
+            @include sm {
+                width: $spacing-xxlg;
+            }
+            .influencer-name {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        .influencer-added {
+            display: flex;
+            align-items: center;
+            width: $spacing-xxlg;
+            @include sm {
+                width: inherit;
+            }
+        }
+        .tiktok-accounts {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            gap: $spacing-sm;
+            width: $spacing-xxlg;
+            @include sm {
+                display: none;
+            }
+
+        }
+        .instagram-accounts {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            gap: $spacing-sm;
+            width: $spacing-xxlg;
+            @include sm {
+                display: none;
+            }
+        }
+    }
+    .manager-details {
+        display: flex;
+        align-items: center;
+        .manager-container {
+            display: flex;
+            justify-content: start;
+            width: calc(1.5 * $spacing-xxlg);
+            @include sm {
+                width: $spacing-xxlg;
+            }
+            .manager-name {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+}
+

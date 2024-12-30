@@ -1,0 +1,59 @@
+@import '../../styles/responsive.scss';
+@import '../../styles/variables.scss';
+
+#app-header {
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $header-background-color;
+    padding-inline: $spacing-xxlg;
+        @include lg{
+            padding-inline: $spacing-xlg;
+        }
+        @include md{
+            padding-inline: $spacing-lg;
+        }
+        @include sm{
+            padding-inline: $spacing-md;
+        }
+    #header-logo-wrapper {
+        width: 2rem;
+        height: 2rem;
+        #header-logo {
+            height: 100%;
+            width: auto;
+        }
+    }
+    #header-manager-container {
+        display: flex;
+        flex-direction: row;
+        gap: $spacing-sm;
+        align-items: center;
+        .manager-name {
+            display: flex;
+            align-items: center;
+            font-size: inherit;
+            @include sm{
+                display: none;
+            }
+        }
+        .manager-img-wrapper {
+            height: 2rem;
+            width: 2rem;
+            @include md{
+                height: 1.5rem;
+                width: 1.5rem;
+            }
+
+            .manager-img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                border-radius: 50%;
+            }
+        }
+    }
+}

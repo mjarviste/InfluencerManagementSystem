@@ -1,0 +1,48 @@
+@import '../../styles/variables.scss';
+@import '../../styles/responsive.scss';
+
+.button {
+    display: flex;
+    align-items: center;
+    min-width: 3rem;
+    gap: 0.25rem;
+    padding: $spacing-sm $spacing-md;
+    border-radius: 0.25rem;
+    font-family: inherit;
+    width: max-content;
+    height: max-content;
+    &:hover {
+        filter: brightness(0.8);
+    }
+    @include lg{
+        padding: $spacing-sm;
+        font-size: $font-size-lg;
+        line-height: $line-height-sm;
+    }
+    @include md{
+        font-size: $font-size-md;
+        line-height: $line-height-md;
+    }
+    @include sm{
+        font-size: $font-size-sm;
+        line-height: $line-height-lg;
+    }
+    &.primary {
+        background-color: $primary-color;
+        border: none;
+        color: $background-color;
+    }
+    &.secondary {
+        background-color: inherit;
+        border: 1px solid $secondary-color;
+        color: $secondary-color;
+        &:hover {
+            filter: brightness(1.5);
+        }
+    }
+    &.tertiary {
+        background-color: $delete-color;
+        border: none;
+        color: $text-color;
+    }
+}
