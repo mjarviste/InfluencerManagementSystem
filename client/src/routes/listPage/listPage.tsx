@@ -3,7 +3,6 @@ import Button from "../../components/button/Button";
 import ListRow from "../../components/listrow/ListRow";
 import './listPage.scss'
 import { Account, Influencer, Manager } from '../../types/types';
-import axios from "axios";
 import { Link } from "react-router-dom";
 import api from "../../utils/api";
 
@@ -32,13 +31,13 @@ const ListPage: React.FC = () => {
     };
 
     const fetchManagers = async (): Promise<Manager[]> => {
-        const response = await axios.get('http://localhost:3000/api/managers');
+        const response = await api.get('/api/managers');
         return response.data;
     };
 
     const fetchAccounts = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/accounts');
+            const response = await api.get('/api/accounts');
             setAccounts(response.data);
         } catch (error) {
             console.error('Failed to fetch accounts:', error);
@@ -46,7 +45,7 @@ const ListPage: React.FC = () => {
     };
 
     const fetchInfluencerById = async (id: string): Promise<Influencer> => {
-        const response = await axios.get(`http://localhost:3000/api/influencers/${id}`);
+        const response = await api.get(`/api/influencers/${id}`);
         return response.data;
     }
 
@@ -56,7 +55,7 @@ const ListPage: React.FC = () => {
             setInfluencers(await fetchInfluencers());
         }
         else {
-            const response = await axios.get('http://localhost:3000/api/influencers/by-manager', {
+            const response = await api.get('/api/influencers/by-manager', {
                 params: { managerId },
             });
             setInfluencers(response.data);
@@ -67,7 +66,7 @@ const ListPage: React.FC = () => {
         const searchTerm = event.target.value;
         if (searchTerm.length >= 2) {
             try {
-                const response = await axios.get('http://localhost:3000/api/influencers/search', {
+                const response = await api.get('/api/influencers/search', {
                     params: { name: searchTerm },
                 });
                 setInfluencers(response.data);
@@ -122,8 +121,8 @@ const ListPage: React.FC = () => {
             console.log("id:", activeId)
 
 
-            const response = await axios.post(
-                `http://localhost:3000/api/accounts`,
+            const response = await api.post(
+                `/api/accounts`,
                 {
                     influencerId: activeId,
                     username: activeUsername,
@@ -141,7 +140,7 @@ const ListPage: React.FC = () => {
 
     const handleDeleteAccount = async (accountId: string): Promise<void> => {
         try {
-            const response = await axios.delete(`http://localhost:3000/api/accounts/${accountId}`);
+            const response = await api.delete(`/api/accounts/${accountId}`);
             alert(response.data.message)
             setActiveAccounts((prevActiveAccounts) => prevActiveAccounts.filter(
                 (account) => account.id !== accountId))
@@ -161,7 +160,7 @@ const ListPage: React.FC = () => {
     const handleDeleteInfluencer = async (influencerId: string) => {
         console.log("ID", influencerId)
         try {
-            const response = await axios.delete(`http://localhost:3000/api/influencers/${influencerId}`);
+            const response = await api.delete(`/api/influencers/${influencerId}`);
             alert(response.data.message); // Notify the user
             setInfluencers((prevInfluencers) =>
                 prevInfluencers.filter((influencer) => influencer.id !== influencerId)
@@ -175,8 +174,8 @@ const ListPage: React.FC = () => {
     const handleManagerChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
         const newManagerId = event.target.value;
         try {
-            const response = await axios.put(
-                `http://localhost:3000/api/influencers/${activeId}`,
+            const response = await api.put(
+                `/api/influencers/${activeId}`,
                 { managerId: newManagerId }
             );
             alert(response.data.message);
