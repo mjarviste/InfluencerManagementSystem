@@ -94,6 +94,7 @@ const ListPage: React.FC = () => {
     };
 
     const onInfluencerClick = async (id: string): Promise<void> => {
+        setEditActive(true);
         const influencer = await fetchInfluencerById(id);
         setActiveFirstName(influencer.firstName);
         setActiveLastName(influencer.lastName);
@@ -102,7 +103,6 @@ const ListPage: React.FC = () => {
         setActiveAccounts(influencer.accounts);
         setActiveId(influencer.id);
         console.log("Manager ID:", influencer.managerId)
-        setEditActive(true);
         console.log("Influencer:", influencer);
     }
 
