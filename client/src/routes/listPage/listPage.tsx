@@ -95,15 +95,27 @@ const ListPage: React.FC = () => {
 
     const onInfluencerClick = async (id: string): Promise<void> => {
         setEditActive(true);
-        const influencer = await fetchInfluencerById(id);
-        setActiveFirstName(influencer.firstName);
-        setActiveLastName(influencer.lastName);
-        setActiveManagerFirstName(influencer.manager.firstName);
-        setActiveManagerLastName(influencer.manager.lastName);
-        setActiveAccounts(influencer.accounts);
-        setActiveId(influencer.id);
-        console.log("Manager ID:", influencer.managerId)
-        console.log("Influencer:", influencer);
+        const influencer = influencers.find((influencer) => influencer.id === id);
+        
+        if (influencer) {
+            setActiveFirstName(influencer.firstName);
+            setActiveLastName(influencer.lastName);
+            setActiveManagerFirstName(influencer.manager.firstName);
+            setActiveManagerLastName(influencer.manager.lastName);
+            setActiveAccounts(influencer.accounts);
+            setActiveId(influencer.id);
+            console.log("Manager ID:", influencer.managerId)
+            console.log("Influencer:", influencer);
+        }
+        else {
+            alert("Influencer not found!")
+            console.error("Influencer not found!");
+            setActiveFirstName("");
+            setActiveLastName("");
+            setActiveManagerFirstName("");
+            setActiveManagerLastName("");
+            setActiveId("");
+        }
     }
 
     const handleAddAccount = async (event: React.FormEvent): Promise<void> => {
