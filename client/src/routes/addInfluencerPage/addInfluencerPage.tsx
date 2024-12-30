@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import './addInfluencerPage.scss'
 import { useEffect, useState } from 'react';
 import { Manager, Account} from '../../types/types';
 import Button from '../../components/button/Button';
+import api from '../../utils/api';
 
 const AddInfluencerPage: React.FC = () => {
 
@@ -21,7 +21,7 @@ const AddInfluencerPage: React.FC = () => {
 
     const fetchManagers = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/managers');
+            const response = await api.get('/api/managers');
             setManagers(response.data);
         } catch (error) {
             console.error('Failed to fetch managers:', error);
@@ -30,7 +30,7 @@ const AddInfluencerPage: React.FC = () => {
 
     const fetchAccounts = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/accounts');
+            const response = await api.get('/api/accounts');
             setAccounts(response.data);
         } catch (error) {
             console.error('Failed to fetch accounts:', error);
@@ -85,7 +85,7 @@ const AddInfluencerPage: React.FC = () => {
         console.log(newInfluencer)
 
         try {
-            const response = await axios.post('http://localhost:3000/api/influencers', newInfluencer);
+            const response = await api.post('/api/influencers', newInfluencer);
             alert('Influencer added successfully!');
             console.log('Created Influencer:', response.data);
             setFirstName('');

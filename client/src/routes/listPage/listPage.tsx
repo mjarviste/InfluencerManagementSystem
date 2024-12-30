@@ -1,10 +1,11 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
-import axios from 'axios';
 import Button from "../../components/button/Button";
 import ListRow from "../../components/listrow/ListRow";
 import './listPage.scss'
 import { Account, Influencer, Manager } from '../../types/types';
+import axios from "axios";
 import { Link } from "react-router-dom";
+import api from "../../utils/api";
 
 const ListPage: React.FC = () => {
 
@@ -24,7 +25,9 @@ const ListPage: React.FC = () => {
 
 
     const fetchInfluencers = async (): Promise<Influencer[]> => {
-        const response = await axios.get('http://localhost:3000/api/influencers');
+        console.log("Here")
+        const response = await api.get('/api/influencers');
+        console.log("Data:", response.data)
         return response.data;
     };
 
