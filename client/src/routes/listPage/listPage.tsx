@@ -59,11 +59,6 @@ const ListPage: React.FC = () => {
         }
     };
 
-    const fetchInfluencerById = async (id: string): Promise<Influencer> => {
-        const response = await api.get(`/api/influencers/${id}`);
-        return response.data;
-    }
-
     const fetchInfluencersByManager = async (event: ChangeEvent<HTMLSelectElement>): Promise<void> => {
         const managerId = event.target.value;
         if (managerId === "all") {
