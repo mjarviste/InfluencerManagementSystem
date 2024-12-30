@@ -13,7 +13,7 @@ interface ListRowProps {
     onClick: (...args: any[]) => void;  
 }
 
-const ListRow: React.FC<ListRowProps> = ({influencerFirstName, influencerLastName, managerFirstName, avatar, addedDate, managerLastName, accounts, onClick}) => {
+const ListRow: React.FC<ListRowProps> = ({influencerFirstName, influencerLastName, managerFirstName, addedDate, managerLastName, accounts, onClick}) => {
     return (
         <div className='list-row' onClick={onClick}>
             <div className='influencer-details'>

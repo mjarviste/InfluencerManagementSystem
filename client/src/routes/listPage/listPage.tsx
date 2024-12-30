@@ -17,7 +17,6 @@ const ListPage: React.FC = () => {
     const [activeId, setActiveId] = useState('');
     const [activeManagerFirstName, setActiveManagerFirstName] = useState('');
     const [activeManagerLastName, setActiveManagerLastName] = useState('');
-    const [activeManagerId, setActiveManagerId] = useState('');
     const [activeUsername, setActiveUsername] = useState('');
     const [type, setType] = useState<'instagram' | 'tiktok' | "">("");
     const [activeAccounts, setActiveAccounts] = useState<Account[]>([]);
@@ -86,7 +85,6 @@ const ListPage: React.FC = () => {
         setActiveAccounts(influencer.accounts);
         setActiveId(influencer.id);
         console.log("Manager ID:", influencer.managerId)
-        setActiveManagerId(influencer.manager.id);
         setEditActive(true);
         console.log("Influencer:", influencer);
     }
@@ -155,7 +153,6 @@ const ListPage: React.FC = () => {
         setEditActive(false);
         setAccountEditActive(false);
         setAccounts([]);
-        setActiveManagerId('');
     }
 
     const handleDeleteInfluencer = async (influencerId: string) => {
@@ -179,15 +176,13 @@ const ListPage: React.FC = () => {
                 `http://localhost:3000/api/influencers/${activeId}`,
                 { managerId: newManagerId }
             );
+            alert(response.data.message);
 
-            // Update the state with the new manager ID
-            setActiveManagerId(newManagerId);
             const newManager = managers.find((manager) => manager.id === newManagerId);
             setActiveManagerFirstName(newManager!.firstName);
             setActiveManagerLastName(newManager!.lastName);
             setInfluencers(await fetchInfluencers());
 
-            // Optionally call a parent callback to update the UI
             alert("Manager updated successfully!");
         } catch (error) {
             console.error("Failed to update manager:", error);
