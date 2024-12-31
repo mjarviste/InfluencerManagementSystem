@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import cors from 'cors'
+import cors, { CorsOptions } from 'cors'
 import managerRouter from './routes/manager.route';
 import influencerRouter from './routes/influencer.routes';
 import accountRouter from './routes/account.routes';
@@ -9,7 +9,23 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({origin: '*', credentials: true}))
+const allowedOrigins = process.env.NODE_ENV === 'production' 
+? ['https://influencer-frontend-two.vercel.app']
+: ['http://localhost:5173'];
+
+const corsOptions: CorsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.error(`Blocked origin: ${origin}`);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+};
+
+app.use(cors(corsOptions))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
