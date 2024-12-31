@@ -21,7 +21,7 @@ const getAccounts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (error) {
         console.error(error);
-        res.status(404).json({ message: "Failed to get accounts" });
+        res.status(500).json({ message: "Failed to get accounts" });
     }
 });
 exports.getAccounts = getAccounts;

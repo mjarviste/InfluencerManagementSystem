@@ -8,13 +8,14 @@ import api from "../../utils/api";
 
 const ListPage: React.FC = () => {
 
-    const [influencers, setInfluencers] = useState<Influencer[]>([]);
+    const [influencers, setInfluencers] = useState<Influencer[] | null>(null);
     const [managers, setManagers] = useState<Manager[]>([]);
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [activeAccounts, setActiveAccounts] = useState<Account[]>([]);
 
     const [editActive, setEditActive] = useState(false);
     const [accountEditActive, setAccountEditActive] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const [activeFirstName, setActiveFirstName] = useState('');
     const [activeLastName, setActiveLastName] = useState('');
@@ -32,9 +33,9 @@ const ListPage: React.FC = () => {
 
     const getInfluencers = async () => {
         try {
+            setLoading(true);
             const data = await fetchInfluencers();
             setInfluencers(data);
-            console.log("Influkad", data);
             const uniqueManagers: Manager[] = [];
             const seenIds = new Set();
             data.map((influencer) => influencer.manager).forEach(manager => {
@@ -47,7 +48,10 @@ const ListPage: React.FC = () => {
             setManagers(uniqueManagers)
         } catch (error) {
             console.error('Failed to fetch influencers:', error);
+        } finally {
+            setLoading(false);
         }
+
     };
 
     const fetchAccounts = async () => {
@@ -90,8 +94,8 @@ const ListPage: React.FC = () => {
 
     const onInfluencerClick = async (id: string): Promise<void> => {
         setEditActive(true);
-        const influencer = influencers.find((influencer) => influencer.id === id);
-        
+        const influencer = influencers?.find((influencer) => influencer.id === id);
+
         if (influencer) {
             setActiveFirstName(influencer.firstName);
             setActiveLastName(influencer.lastName);
@@ -173,7 +177,7 @@ const ListPage: React.FC = () => {
         try {
             await api.delete(`/api/influencers/${influencerId}`);
             setInfluencers((prevInfluencers) =>
-                prevInfluencers.filter((influencer) => influencer.id !== influencerId)
+                prevInfluencers ? prevInfluencers.filter((influencer) => influencer.id !== influencerId) : []
             );
             alert("Influencer Deleted!");
             onEditBackClick();
@@ -203,143 +207,154 @@ const ListPage: React.FC = () => {
     }
 
     useEffect(() => {
+        console.log("Influkad enne:", influencers)
         getInfluencers();
+        console.log("Influkad pärast:", influencers)
     }, []);
 
     return (
         <div id="list-page">
-            <div id="list-contents-container" className={editActive ? 'hidden' : ''}>
-                <div id="list-heading-container">
-                    <h1>Influencers list</h1>
-                    <Link to={'/add-influencer'}>
-                        <Button className="add-influencer-btn" label="Add Influencer" />
-                    </Link>
+            {loading ? (
+                <div id="loader-wrapper">
+                    <div id="loader"></div>
                 </div>
-                <div id="list-search-filter-container">
-                    <div id="list-search-wrapper">
-                        <input id="list-search" type="text" placeholder="Search" onChange={fetchSearchInfluencers} />
-                    </div>
-                    <div id="list-filter-wrapper">
-                        <select name="managers" id="list-filter" defaultValue="none" onChange={fetchInfluencersByManager} >
-                            <option id="filter-placeholder" value="none" disabled hidden>Filter By Manager</option>
-                            <option id="filter-show-all" value="all">Show All</option>
-                            {managers.map((manager) => (
-                                <option key={manager.id} value={manager.id}>{manager.firstName} {manager.lastName}</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
-                <div id="list-influencers">
-                    <div id="list-influencers-container">
-                        <div id="list-influencers-header">
-                            <div id='header-influencer-details'>
-                                <div id='header-influencer-name-wrapper'>
-                                    <span id='header-influencer-name'>Influencer</span>
-                                </div>
-                                <div id='header-influencer-added-wrapper'>
-                                    <span id='header-influencer-added'>Added</span>
-                                </div>
-                                <div id='header-tiktok-accounts-wrapper'>
-                                    <span id='header-tiktok-accounts'>Tiktok</span>
-                                </div>
-                                <div id='header-instagram-accounts-wrapper'>
-                                    <span id='header-instagram-accounts'>Instagram</span>
-                                </div>
+            ) : (
+                <>
+                    <div id="list-contents-container" className={editActive ? 'hidden' : ''}>
+                        <div id="list-heading-container">
+                            <h1>Influencers list</h1>
+                            <Link to={'/add-influencer'}>
+                                <Button className="add-influencer-btn" label="Add Influencer" />
+                            </Link>
+                        </div>
+                        <div id="list-search-filter-container">
+                            <div id="list-search-wrapper">
+                                <input id="list-search" type="text" placeholder="Search" onChange={fetchSearchInfluencers} />
                             </div>
-                            <div id='header-manager-details'>
-                                <div id='header-manager-wrapper'>
-                                    <span id='header-manager-name'>Manager</span>
-                                </div>
+                            <div id="list-filter-wrapper">
+                                <select name="managers" id="list-filter" defaultValue="none" onChange={fetchInfluencersByManager} >
+                                    <option id="filter-placeholder" value="none" disabled hidden>Filter By Manager</option>
+                                    <option id="filter-show-all" value="all">Show All</option>
+                                    {managers.map((manager) => (
+                                        <option key={manager.id} value={manager.id}>{manager.firstName} {manager.lastName}</option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
-                        {influencers.map((influencer) => (
-                            <ListRow
-                                key={influencer.id}
-                                influencerFirstName={influencer.firstName}
-                                influencerLastName={influencer.lastName}
-                                managerFirstName={influencer.manager.firstName}
-                                managerLastName={influencer.manager.lastName}
-                                addedDate={influencer.addedAt}
-                                accounts={influencer.accounts}
-                                onClick={() => onInfluencerClick(influencer.id)}>
-                            </ListRow>
-                        ))}
-                    </div>
-                </div>
-            </div>
-            <div id="edit-influencer" className={editActive ? "active" : ""}>
-                <div id="edit-influencer-content">
-                    <div id="close-edit-influencer" onClick={onEditBackClick}>
-                        <img src="./deleteImg.svg" alt="Close window X" />
-                    </div>
-                    <div id="edit-influencer-details">
-                        <div id="influencer-details-container">
-                            <h2>{activeFirstName} {activeLastName}</h2>
-                            <h4>Manager: {activeManagerFirstName} {activeManagerLastName}</h4>
-                        </div>
-                        <Button className="edit-btn" label={accountEditActive ? "Done" : "Edit"} onClick={() => setAccountEditActive(!accountEditActive)} />
-                    </div>
-                    <div className='username-container'>
-                        <h4>Accounts</h4>
-                        <div className="accounts-list-container">
-                            {activeAccounts.map((account, index) => (
-                                <div className="new-account-container" key={index}>
-                                    <div className="new-account">
-                                        <span>{index + 1}. {account.username}</span>
-                                        <div className="new-account-imgs">
-                                            <div className='social-logo-wrapper'>
-                                                {account.type === "tiktok" ?
-                                                    (<img src='./tiktokLogo.svg' />) :
-                                                    (<img src='./instagramLogo.svg' />)}
-                                            </div>
+                        <div id="list-influencers">
+                            <div id="list-influencers-container">
+                                <div id="list-influencers-header">
+                                    <div id='header-influencer-details'>
+                                        <div id='header-influencer-name-wrapper'>
+                                            <span id='header-influencer-name'>Influencer</span>
+                                        </div>
+                                        <div id='header-influencer-added-wrapper'>
+                                            <span id='header-influencer-added'>Added</span>
+                                        </div>
+                                        <div id='header-tiktok-accounts-wrapper'>
+                                            <span id='header-tiktok-accounts'>Tiktok</span>
+                                        </div>
+                                        <div id='header-instagram-accounts-wrapper'>
+                                            <span id='header-instagram-accounts'>Instagram</span>
                                         </div>
                                     </div>
-                                    <Button className={accountEditActive ? 'delete-btn active' : 'delete-btn'} label={"Delete"} variant="tertiary" onClick={() => handleDeleteAccount(account.id)} />
+                                    <div id='header-manager-details'>
+                                        <div id='header-manager-wrapper'>
+                                            <span id='header-manager-name'>Manager</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-                        <label id="new-username-label" className={accountEditActive ? 'active' : ''} htmlFor="active-username">Add Social Media Account</label>
-                        <div className={accountEditActive ? 'username-details-container active' : 'username-details-container'}>
-                            <input className='form-el' id="accont-username" type="text" name='active-username' placeholder='johndoe123' value={activeUsername} onChange={(e) => setActiveUsername(e.target.value)} />
-                            <div className='radio-btn-container'>
-                                <img src='./instagramLogoGrey.svg' alt='Instagram logo' />
-                                <input
-                                    type='radio'
-                                    id="instagram-radio"
-                                    name="instagram-radio"
-                                    value="instagram"
-                                    checked={type === "instagram"}
-                                    onChange={() => setType("instagram")}>
-                                </input>
-                            </div>
-                            <div className='radio-btn-container'>
-                                <img src='./tiktokLogoGrey.svg' alt='Tiktok logo' />
-                                <input
-                                    type='radio'
-                                    id="tiktok-radio"
-                                    name="tiktok-radio"
-                                    value="tiktok"
-                                    checked={type === "tiktok"}
-                                    onChange={() => setType("tiktok")}>
-                                </input>
-                            </div>
-                            <Button className="add-account-btn" label='Add' variant='secondary' icon='./plusImg.svg' onClick={handleAddAccount} />
-                        </div>
-                        <div className={accountEditActive ? 'managers-list-container form-el-container active' : 'managers-list-container form-el-container'}>
-                            <label className={accountEditActive ? 'active' : ''} htmlFor="managersList">Change Manager</label>
-                            <select className='form-el' name="managersList" value={activeManagerId} id="edit-managers-list" onChange={handleManagerChange}>
-                                {managers.map((manager) => (
-                                    <option key={manager.id} value={manager.id}>{manager.firstName} {manager.lastName}</option>
+                                {influencers?.map((influencer) => (
+                                    <ListRow
+                                        key={influencer.id}
+                                        influencerFirstName={influencer.firstName}
+                                        influencerLastName={influencer.lastName}
+                                        managerFirstName={influencer.manager.firstName}
+                                        managerLastName={influencer.manager.lastName}
+                                        addedDate={influencer.addedAt}
+                                        accounts={influencer.accounts}
+                                        onClick={() => onInfluencerClick(influencer.id)}>
+                                    </ListRow>
                                 ))}
-                            </select>
-                        </div>
-                        <div id="delete-influencer" className={accountEditActive ? 'active' : ''}>
-                            <h3>Delete Influencer</h3>
-                            <Button className="delete-influencer-btn" label="Delete Influencer" variant="tertiary" onClick={() => handleDeleteInfluencer(activeId)} />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                    <div id="edit-influencer" className={editActive ? "active" : ""}>
+                        <div id="edit-influencer-content">
+                            <div id="close-edit-influencer" onClick={onEditBackClick}>
+                                <img src="./deleteImg.svg" alt="Close window X" />
+                            </div>
+                            <div id="edit-influencer-details">
+                                <div id="influencer-details-container">
+                                    <h2>{activeFirstName} {activeLastName}</h2>
+                                    <h4>Manager: {activeManagerFirstName} {activeManagerLastName}</h4>
+                                </div>
+                                <Button className="edit-btn" label={accountEditActive ? "Done" : "Edit"} onClick={() => setAccountEditActive(!accountEditActive)} />
+                            </div>
+                            <div className='username-container'>
+                                <h4>Accounts</h4>
+                                <div className="accounts-list-container">
+                                    {activeAccounts.map((account, index) => (
+                                        <div className="new-account-container" key={index}>
+                                            <div className="new-account">
+                                                <span>{index + 1}. {account.username}</span>
+                                                <div className="new-account-imgs">
+                                                    <div className='social-logo-wrapper'>
+                                                        {account.type === "tiktok" ?
+                                                            (<img src='./tiktokLogo.svg' />) :
+                                                            (<img src='./instagramLogo.svg' />)}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <Button className={accountEditActive ? 'delete-btn active' : 'delete-btn'} label={"Delete"} variant="tertiary" onClick={() => handleDeleteAccount(account.id)} />
+                                        </div>
+                                    ))}
+                                </div>
+                                <label id="new-username-label" className={accountEditActive ? 'active' : ''} htmlFor="active-username">Add Social Media Account</label>
+                                <div className={accountEditActive ? 'username-details-container active' : 'username-details-container'}>
+                                    <input className='form-el' id="accont-username" type="text" name='active-username' placeholder='johndoe123' value={activeUsername} onChange={(e) => setActiveUsername(e.target.value)} />
+                                    <div className='radio-btn-container'>
+                                        <img src='./instagramLogoGrey.svg' alt='Instagram logo' />
+                                        <input
+                                            type='radio'
+                                            id="instagram-radio"
+                                            name="instagram-radio"
+                                            value="instagram"
+                                            checked={type === "instagram"}
+                                            onChange={() => setType("instagram")}>
+                                        </input>
+                                    </div>
+                                    <div className='radio-btn-container'>
+                                        <img src='./tiktokLogoGrey.svg' alt='Tiktok logo' />
+                                        <input
+                                            type='radio'
+                                            id="tiktok-radio"
+                                            name="tiktok-radio"
+                                            value="tiktok"
+                                            checked={type === "tiktok"}
+                                            onChange={() => setType("tiktok")}>
+                                        </input>
+                                    </div>
+                                    <Button className="add-account-btn" label='Add' variant='secondary' icon='./plusImg.svg' onClick={handleAddAccount} />
+                                </div>
+                                <div className={accountEditActive ? 'managers-list-container form-el-container active' : 'managers-list-container form-el-container'}>
+                                    <label className={accountEditActive ? 'active' : ''} htmlFor="managersList">Change Manager</label>
+                                    <select className='form-el' name="managersList" value={activeManagerId} id="edit-managers-list" onChange={handleManagerChange}>
+                                        {managers.map((manager) => (
+                                            <option key={manager.id} value={manager.id}>{manager.firstName} {manager.lastName}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div id="delete-influencer" className={accountEditActive ? 'active' : ''}>
+                                    <h3>Delete Influencer</h3>
+                                    <Button className="delete-influencer-btn" label="Delete Influencer" variant="tertiary" onClick={() => handleDeleteInfluencer(activeId)} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
+
         </div>
     )
 }

@@ -33,7 +33,7 @@ const addManager = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     catch (error) {
         console.error(error);
-        res.status(400).json({ message: "Can't create a manager" });
+        res.status(500).json({ message: "Can't create a manager" });
     }
 });
 exports.addManager = addManager;
@@ -46,7 +46,7 @@ const getManagers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (error) {
         console.error(error);
-        res.status(404).json({ message: "Cant get managers" });
+        res.status(500).json({ message: "Cant get managers" });
     }
 });
 exports.getManagers = getManagers;

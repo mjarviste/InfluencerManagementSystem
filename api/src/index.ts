@@ -11,7 +11,7 @@ const app = express();
 
 const allowedOrigins = process.env.NODE_ENV === 'production' 
 ? ['https://influencer-frontend-two.vercel.app']
-: ['http://localhost:5173'];
+: ['http://localhost:5173', 'http://localhost:4173'];
 
 const corsOptions: CorsOptions = {
     origin: (origin, callback) => {

@@ -8,7 +8,7 @@ export const getAccounts = async (req: Request, res: Response) => {
         res.status(200).json(account);
     } catch (error) {
         console.error(error);
-        res.status(404).json({message: "Failed to get accounts"});
+        res.status(500).json({message: "Failed to get accounts"});
     }
 }
 export const getInfluencerAccounts = async (req: Request, res: Response) => {

@@ -11,7 +11,22 @@ const influencer_routes_1 = __importDefault(require("./routes/influencer.routes"
 const account_routes_1 = __importDefault(require("./routes/account.routes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)({ origin: '*', credentials: true }));
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? ['https://influencer-frontend-two.vercel.app']
+    : ['http://localhost:5173', 'http://localhost:4173'];
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            console.error(`Blocked origin: ${origin}`);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+};
+app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 // Routes

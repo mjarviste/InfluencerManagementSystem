@@ -19,7 +19,7 @@ export const addManager = async (req: Request, res: Response) => {
         res.json(manager);
     } catch(error) {
         console.error(error);
-        res.status(400).json({message: "Can't create a manager"});
+        res.status(500).json({message: "Can't create a manager"});
     }
 }
 export const getManagers = async (req: Request, res: Response) => {
@@ -30,7 +30,7 @@ export const getManagers = async (req: Request, res: Response) => {
         res.status(200).json(managers);
     } catch (error) {
         console.error(error);
-        res.status(404).json({message: "Cant get managers"});
+        res.status(500).json({message: "Cant get managers"});
     }
 }
 export const getManager = async (req: Request, res: Response) => {

@@ -14,7 +14,7 @@ const AddInfluencerPage: React.FC = () => {
     const [lastName, setLastName] = useState("");
     const [managerId, setManagerId] = useState("");
     const [username, setUsername] = useState("");
-    
+
     const [type, setType] = useState<'instagram' | 'tiktok' | "">("");
     const [newAccounts, setNewAccounts] = useState<{ username: string; type: 'instagram' | 'tiktok' }[]>([]);
 
@@ -143,7 +143,7 @@ const AddInfluencerPage: React.FC = () => {
                     </div>
                     <div id='managers-list-container' className='form-el-container'>
                         <label htmlFor="managersList">Manager</label>
-                        <select className='form-el' name="managersList" id="managers-list" onChange={(e) => {
+                        <select className='form-el' name="managersList" id="managers-list" value="none" onChange={(e) => {
                             setManagerId(e.target.value)
                         }}>
                             <option id="managers-placeholder" value="none" disabled selected hidden>Choose Manager</option>
