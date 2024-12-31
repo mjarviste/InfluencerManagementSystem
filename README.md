@@ -124,3 +124,25 @@ The frontend will be running at http://localhost:5173.
 - Add pagination for large datasets.
 - Implement authentication for secure access.
 - Improve error handling and validation.
+
+## Documentation
+- [API Documentation](docs/API_Documentation.md)
+
+## Design
+- [Figma Design](docs/Figma_Design.md)
+
+## Screenshots from the 
+1. **Influencers List Page**
+   ![Influencers List Page Large](screenshots/influencers-list-lg.png)
+   ![Influencers List Page Small](screenshots/influencers-list-sm.png)
+   
+2. **Add Influencer Page**
+   ![Add Influencer Page Large](screenshots/add-influencer-lg.png)
+   ![Add Influencer Page Small](screenshots/add-influencer-sm.png)
+
+3. **Add Influencer Page**
+   ![Edit Influencer Page Large](screenshots/edit-influencer-lg.png)
+   ![Edit Influencer Page Small](screenshots/edit-influencer-sm.png)
+
+## Live Demo
+- [Live App](https://influencer-frontend-two.vercel.app/)

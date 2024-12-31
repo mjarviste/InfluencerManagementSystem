@@ -207,9 +207,7 @@ const ListPage: React.FC = () => {
     }
 
     useEffect(() => {
-        console.log("Influkad enne:", influencers)
         getInfluencers();
-        console.log("Influkad pärast:", influencers)
     }, []);
 
     return (
