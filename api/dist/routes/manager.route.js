@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const manager_controller_1 = require("../controllers/manager.controller");
 const router = express_1.default.Router();
 router.get('/', manager_controller_1.getManagers);
-router.get('/:id', manager_controller_1.getManager);
 router.post('/', manager_controller_1.addManager);
+router.get('/:id', manager_controller_1.getManager);
 exports.default = router;
 //# sourceMappingURL=manager.route.js.map

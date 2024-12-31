@@ -29,7 +29,6 @@ export const getManagers = async (req: Request, res: Response) => {
         });
         res.status(200).json(managers);
     } catch (error) {
-        console.log("Viga")
         console.error(error);
         res.status(404).json({message: "Cant get managers"});
     }

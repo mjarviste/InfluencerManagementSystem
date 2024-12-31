@@ -4,10 +4,10 @@ import { addInfluencer, getInfluencers, getInfluencer, updateInfluencer, deleteI
 const router = express.Router();
 
 router.get('/', getInfluencers);
+router.post('/', addInfluencer);
 router.get('/search', searchInfluencers);
 router.get('/by-manager', getInfluencersByManager);
 router.get('/:id', getInfluencer);
-router.post('/', addInfluencer);
 router.put('/:id', updateInfluencer);
 router.delete('/:id', deleteInfluencer);
 

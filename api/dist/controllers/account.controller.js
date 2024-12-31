@@ -77,7 +77,7 @@ const deleteAccount = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(200).json({ message: "Account deleted" });
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({ message: "Failed to delete account" });
     }
 });

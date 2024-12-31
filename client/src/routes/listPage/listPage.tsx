@@ -129,7 +129,7 @@ const ListPage: React.FC = () => {
             return;
         }
         if (activeAccounts.some((account) => account.username === activeUsername && account.type === type)) {
-            alert('This account already exists in the list');
+            alert('This account already exists');
             return;
         }
         try {
@@ -153,8 +153,7 @@ const ListPage: React.FC = () => {
 
     const handleDeleteAccount = async (accountId: string): Promise<void> => {
         try {
-            const response = await api.delete(`/api/accounts/${accountId}`);
-            alert(response.data.message)
+            await api.delete(`/api/accounts/${accountId}`);
             setActiveAccounts((prevActiveAccounts) => prevActiveAccounts.filter(
                 (account) => account.id !== accountId))
             setInfluencers(await fetchInfluencers());
@@ -172,11 +171,11 @@ const ListPage: React.FC = () => {
 
     const handleDeleteInfluencer = async (influencerId: string) => {
         try {
-            const response = await api.delete(`/api/influencers/${influencerId}`);
-            alert(response.data.message);
+            await api.delete(`/api/influencers/${influencerId}`);
             setInfluencers((prevInfluencers) =>
                 prevInfluencers.filter((influencer) => influencer.id !== influencerId)
             );
+            alert("Influencer Deleted!");
             onEditBackClick();
         } catch (error) {
             console.error("Failed to delete influencer:", error);
@@ -188,12 +187,9 @@ const ListPage: React.FC = () => {
         const newManagerId = event.target.value;
         setActiveManagerId(newManagerId);
         try {
-            const response = await api.put(
-                `/api/influencers/${activeId}`,
+            await api.put(`/api/influencers/${activeId}`,
                 { managerId: newManagerId }
             );
-            alert(response.data.message);
-
             const newManager = managers.find((manager) => manager.id === newManagerId);
             setActiveManagerFirstName(newManager!.firstName);
             setActiveManagerLastName(newManager!.lastName);

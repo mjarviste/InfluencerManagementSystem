@@ -4,7 +4,7 @@ import { addManager, getManagers, getManager } from '../controllers/manager.cont
 const router = express.Router();
 
 router.get('/', getManagers);
-router.get('/:id', getManager);
 router.post('/', addManager);
+router.get('/:id', getManager);
 
 export default router;
