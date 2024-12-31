@@ -21,6 +21,9 @@
                 align-items: center;
 
             }
+            a {
+                text-decoration: none;
+            }
         }
 
         #list-search-filter-container {
@@ -123,7 +126,7 @@
                         #header-influencer-name-wrapper {
                             display: flex;
                             align-items: center;
-                            width: 64px;
+                            width: calc(1.5 * $spacing-xxlg);
                             @include sm {
                                 width: $spacing-xxlg;
                             }

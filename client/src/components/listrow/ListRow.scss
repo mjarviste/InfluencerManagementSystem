@@ -9,6 +9,7 @@
     padding: $spacing-md $spacing-sm;
     &:hover {
         background: $tertiary-color;
+        cursor: pointer;
     }
     @include sm {
         padding: calc(1.5 * $spacing-sm) $spacing-xsm;

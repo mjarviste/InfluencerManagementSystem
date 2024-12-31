@@ -4,6 +4,7 @@
 .button {
     display: flex;
     align-items: center;
+    justify-content: center;
     min-width: 3rem;
     gap: 0.25rem;
     padding: $spacing-sm $spacing-md;
@@ -13,6 +14,7 @@
     height: max-content;
     &:hover {
         filter: brightness(0.8);
+        cursor: pointer;
     }
     @include lg{
         padding: $spacing-sm;

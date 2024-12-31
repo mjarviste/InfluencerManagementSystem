@@ -11,22 +11,22 @@ const ListPage: React.FC = () => {
     const [influencers, setInfluencers] = useState<Influencer[]>([]);
     const [managers, setManagers] = useState<Manager[]>([]);
     const [accounts, setAccounts] = useState<Account[]>([]);
+    const [activeAccounts, setActiveAccounts] = useState<Account[]>([]);
+
     const [editActive, setEditActive] = useState(false);
+    const [accountEditActive, setAccountEditActive] = useState(false);
+
     const [activeFirstName, setActiveFirstName] = useState('');
     const [activeLastName, setActiveLastName] = useState('');
     const [activeId, setActiveId] = useState('');
+    const [activeManagerId, setActiveManagerId] = useState('');
     const [activeManagerFirstName, setActiveManagerFirstName] = useState('');
     const [activeManagerLastName, setActiveManagerLastName] = useState('');
     const [activeUsername, setActiveUsername] = useState('');
     const [type, setType] = useState<'instagram' | 'tiktok' | "">("");
-    const [activeAccounts, setActiveAccounts] = useState<Account[]>([]);
-    const [accountEditActive, setAccountEditActive] = useState(false);
-
 
     const fetchInfluencers = async (): Promise<Influencer[]> => {
-        console.log("Here")
         const response = await api.get('/api/influencers');
-        console.log("Data:", response.data)
         return response.data;
     };
 
@@ -34,7 +34,7 @@ const ListPage: React.FC = () => {
         try {
             const data = await fetchInfluencers();
             setInfluencers(data);
-
+            console.log("Influkad", data);
             const uniqueManagers: Manager[] = [];
             const seenIds = new Set();
             data.map((influencer) => influencer.manager).forEach(manager => {
@@ -97,10 +97,9 @@ const ListPage: React.FC = () => {
             setActiveLastName(influencer.lastName);
             setActiveManagerFirstName(influencer.manager.firstName);
             setActiveManagerLastName(influencer.manager.lastName);
+            setActiveManagerId(influencer.manager.id);
             setActiveAccounts(influencer.accounts);
             setActiveId(influencer.id);
-            console.log("Manager ID:", influencer.managerId)
-            console.log("Influencer:", influencer);
         }
         else {
             alert("Influencer not found!")
@@ -118,18 +117,15 @@ const ListPage: React.FC = () => {
         if (accounts.length === 0) {
             await fetchAccounts();
         }
-        console.log('username:', activeUsername);
         if (!activeUsername || !type) {
             alert('Please provide both username and account type');
             return;
         }
-
         const accountExists = accounts.some(
             (account) => account.username === activeUsername && account.type === type
         );
-
         if (accountExists) {
-            alert('This account already exists in the database');
+            alert('This account already exists');
             return;
         }
         if (activeAccounts.some((account) => account.username === activeUsername && account.type === type)) {
@@ -137,12 +133,6 @@ const ListPage: React.FC = () => {
             return;
         }
         try {
-
-            console.log("Username:", activeUsername)
-            console.log("type:", type)
-            console.log("id:", activeId)
-
-
             const response = await api.post(
                 `/api/accounts`,
                 {
@@ -153,6 +143,7 @@ const ListPage: React.FC = () => {
             );
             setActiveAccounts([...activeAccounts, response.data]);
             setActiveUsername('');
+            setInfluencers(await fetchInfluencers());
             setType('');
         } catch (error) {
             console.error('Failed to add account:', error);
@@ -180,21 +171,22 @@ const ListPage: React.FC = () => {
     }
 
     const handleDeleteInfluencer = async (influencerId: string) => {
-        console.log("ID", influencerId)
         try {
             const response = await api.delete(`/api/influencers/${influencerId}`);
-            alert(response.data.message); // Notify the user
+            alert(response.data.message);
             setInfluencers((prevInfluencers) =>
                 prevInfluencers.filter((influencer) => influencer.id !== influencerId)
-            ); // Update the UI
+            );
             onEditBackClick();
         } catch (error) {
             console.error("Failed to delete influencer:", error);
             alert("Error deleting influencer. Please try again.");
         }
     }
+
     const handleManagerChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
         const newManagerId = event.target.value;
+        setActiveManagerId(newManagerId);
         try {
             const response = await api.put(
                 `/api/influencers/${activeId}`,
@@ -214,9 +206,7 @@ const ListPage: React.FC = () => {
         }
     }
 
-
     useEffect(() => {
-        console.log("Hello")
         getInfluencers();
     }, []);
 
@@ -234,8 +224,8 @@ const ListPage: React.FC = () => {
                         <input id="list-search" type="text" placeholder="Search" onChange={fetchSearchInfluencers} />
                     </div>
                     <div id="list-filter-wrapper">
-                        <select name="managers" id="list-filter" onChange={fetchInfluencersByManager} >
-                            <option id="filter-placeholder" value="none" disabled selected hidden>Filter By Manager</option>
+                        <select name="managers" id="list-filter" defaultValue="none" onChange={fetchInfluencersByManager} >
+                            <option id="filter-placeholder" value="none" disabled hidden>Filter By Manager</option>
                             <option id="filter-show-all" value="all">Show All</option>
                             {managers.map((manager) => (
                                 <option key={manager.id} value={manager.id}>{manager.firstName} {manager.lastName}</option>
@@ -341,8 +331,7 @@ const ListPage: React.FC = () => {
                         </div>
                         <div className={accountEditActive ? 'managers-list-container form-el-container active' : 'managers-list-container form-el-container'}>
                             <label className={accountEditActive ? 'active' : ''} htmlFor="managersList">Change Manager</label>
-                            <select className='form-el' name="managersList" id="edit-managers-list" onChange={handleManagerChange}>
-                                <option id="edit-managers-placeholder" value="none" disabled selected hidden>Choose Manager</option>
+                            <select className='form-el' name="managersList" value={activeManagerId} id="edit-managers-list" onChange={handleManagerChange}>
                                 {managers.map((manager) => (
                                     <option key={manager.id} value={manager.id}>{manager.firstName} {manager.lastName}</option>
                                 ))}
