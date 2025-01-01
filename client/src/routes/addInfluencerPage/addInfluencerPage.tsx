@@ -143,10 +143,10 @@ const AddInfluencerPage: React.FC = () => {
                     </div>
                     <div id='managers-list-container' className='form-el-container'>
                         <label htmlFor="managersList">Manager</label>
-                        <select className='form-el' name="managersList" id="managers-list" value="none" onChange={(e) => {
+                        <select className='form-el' name="managersList" id="managers-list" defaultValue="none" onChange={(e) => {
                             setManagerId(e.target.value)
                         }}>
-                            <option id="managers-placeholder" value="none" disabled selected hidden>Choose Manager</option>
+                            <option id="managers-placeholder" value="none" disabled hidden>Choose Manager</option>
                             {managers.map((manager) => (
                                 <option key={manager.id} value={manager.id}>{manager.firstName} {manager.lastName}</option>
                             ))}

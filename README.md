@@ -18,7 +18,7 @@ Welcome to the Influencer Management System! 🎉 This is a full-stack web appli
 InfluencerManagementSystem/
 │
 ├── api/                 # Backend code
-│   ├── prisma/          # Prisma schema and migration files
+│   ├── prisma/          # Prisma schema file
 │   ├── src/             
 │   │   ├── controllers/ # API controllers
 │   │   ├── routes/      # API routes
@@ -27,14 +27,24 @@ InfluencerManagementSystem/
 │   │   └── .env         # Backend environment variables
 │   └── package.json     # Backend dependencies
 │
-├── client/              # Frontend code
+├── client/
+│   ├── public/          # Images and assets
 │   ├── src/             
 │   │   ├── components/  # Reusable components (e.g., Button, ListRow)
+│   │   ├── fonts/       # Project fonts
 │   │   ├── routes/      # Pages (e.g., ListPage, AddInfluencerPage)
+│   │   ├── styles/      # Global style files
 │   │   ├── types/       # TypeScript types
 │   │   ├── utils/       # Utility files (e.g., Axios instance)
 │   │   └── .env         # Frontend environment variables
 │   └── package.json     # Frontend dependencies
+│
+├── docs/                # Docs for API and Figma design
+│    ├── API_Documentation.md
+│    └── Figma_Design.md
+│
+├── screenshots/         # Screenshots of the project
+│
 │
 └── README.md            # Project overview
 ```
@@ -45,6 +55,7 @@ InfluencerManagementSystem/
 - Vite for fast development
 - SCSS for styling
 - Axios for API calls
+- Vercel for deployment
 
 ### Backend
 - Node.js with TypeScript
@@ -63,7 +74,13 @@ InfluencerManagementSystem/
 git clone https://github.com/mjarviste/InfluencerManagementSystem.git
 cd InfluencerManagementSystem
 ```
-### 2. Backend Setup
+### 2.Set Up MongoDB:
+1. Go to MongoDB Atlas and create a free cluster.
+2. Create a database named influencer-management-system (or your preferred name).
+3. Add a user with access credentials.
+4. Whitelist your IP address or allow access from anywhere (0.0.0.0/0) for testing purposes.
+
+### 3. Backend Setup
 - Navigate to the `api` directory:
 ```bash
 cd api
@@ -72,15 +89,20 @@ cd api
 ```bash
 npm install
 ```
-- Set up the .env file:
+- Create .env file:
 ```bash
-DATABASE_URL=mongodb+srv://<username>:<password>@cluster0.mongodb.net/influencer-management-system?retryWrites=true&w=majority
+touch .env
+```
+- Set up the .env files:
+```bash
+DATABASE_URL=mongodb+srv://<username>:<password>@<cluster-name>.mongodb.net/<database-name>?retryWrites=true&w=majority
 CLIENT_URL=http://localhost:5173
 NODE_ENV=dev
 ```
+Replace ```<username>```, ```<password>```, ```<cluster-name>```, and ```<database-name>``` with your MongoDB details.
 - Run the Prisma migration:
 ```bash
-npx prisma migrate deploy
+npx prisma db push
 ```
 - Start the backend:
 ```bash
@@ -88,7 +110,7 @@ npm run dev
 ```
 The backend will be running at http://localhost:3000.
 
-### 3. Frontend Setup
+### 4. Frontend Setup
 - Navigate to the `client` directory:
 ```bash
 cd client
@@ -96,6 +118,10 @@ cd client
 - Install dependencies:
 ```bash
 npm install
+```
+- Create .env file:
+```bash
+touch .env
 ```
 - Set up the .env file:
 ```bash
@@ -106,6 +132,22 @@ VITE_API_URL=http://localhost:3000
 npm run dev
 ```
 The frontend will be running at http://localhost:5173.
+
+### 5. Add Managers
+
+To add a new manager to the system, you can use the following API endpoint.
+- Endpoint: **POST** `/api/managers`
+- Request Example:
+You can add a manager named "John Doe" with no influencers using the following cURL command:
+```bash
+curl -X POST http://localhost:3000/api/managers \
+-H "Content-Type: application/json" \
+-d '{
+  "firstName": "John",
+  "lastName": "Doe",
+  "influencers": []
+}'
+```
 
 ## Deployment
 
